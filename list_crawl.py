@@ -6,9 +6,9 @@ conn = boto.connect_s3(anon=True)
 pds = conn.get_bucket('aws-publicdatasets')
 
 # Get all segments
-segments = list(pds.list('common-crawl/crawl-data/CC-MAIN-2014-15/segments/', delimiter='/'))
+segments = list(pds.list('common-crawl/crawl-data/CC-MAIN-2014-23/segments/', delimiter='/'))
 # Record the total size and all file paths for the segments
-files = dict(warc=[], wet=[], wat=[], segments=[x.name for x in segments])
+files = dict(warc=[], wet=[], wat=[], segment=[x.name for x in segments])
 size = dict(warc=0, wet=0, wat=0)
 
 # Traverse each segment and all the files they contain
@@ -24,13 +24,13 @@ sys.stderr.write('\n')
 if not os.path.exists('./crawl_stats/'):
   os.makedirs('./crawl_stats')
 ###
-f = open('crawl_stats/crawl_size.txt', 'w')
+f = open('crawl_stats/crawl.size', 'w')
 for ftype, val in size.items():
   f.write('{}\t{}\n'.format(ftype, val))
 f.close()
 ###
 for ftype in files:
-  f = open('crawl_stats/{}_list.txt'.format(ftype), 'w')
+  f = open('crawl_stats/{}.path'.format(ftype), 'w')
   for fn in files[ftype]:
     f.write(fn + '\n')
   f.close()
@@ -38,3 +38,5 @@ for ftype in files:
 # Kid friendly stats (i.e. console)
 for ftype, fsize in size.items():
   print '{} files contain {} bytes over {} files'.format(ftype, fsize, len(files[ftype]))
+###
+# Note: you might want to run `gzip *` before upload
