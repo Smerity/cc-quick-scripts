@@ -52,5 +52,5 @@ for ftype, fsize in size.items():
   plt.xlabel('Size (bytes)')
   plt.ylabel('Count')
   plt.title('Distribution for {}'.format(ftype.upper()))
-  plt.savefig('crawl_stats/{}_dist.pdf'.format(ftype))
+  plt.savefig(prefix + '{}_dist.pdf'.format(ftype))
   plt.show(block=True)
