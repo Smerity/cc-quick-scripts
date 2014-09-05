@@ -10,7 +10,7 @@ conn = boto.connect_s3(anon=True)
 pds = conn.get_bucket('aws-publicdatasets')
 
 # Get all segments
-target = 'CC-MAIN-2014-15'
+target = 'CC-MAIN-2014-35'
 segments = list(pds.list('common-crawl/crawl-data/{}/segments/'.format(target), delimiter='/'))
 # Record the total size and all file paths for the segments
 files = dict(warc=[], wet=[], wat=[], segment=[x.name for x in segments])
@@ -51,6 +51,8 @@ for ftype, fsize in size.items():
 ###
 # Plot
 for ftype, fsize in size.items():
+  if not fsize:
+    continue
   plt.hist(fsize, bins=50)
   plt.xlabel('Size (bytes)')
   plt.ylabel('Count')
