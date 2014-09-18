@@ -5,12 +5,15 @@ conn = boto.connect_s3()
 pds = conn.get_bucket('aws-publicdatasets')
 
 # Get all segments
-target = 'CC-MAIN-2014-23'
+target = 'CC-MAIN-2014-35'
 segments = list(pds.list('common-crawl/crawl-data/{}/segments/'.format(target), delimiter='/'))
-## For testing ...
-#class Seg(object):
-#  name = 'common-crawl/crawl-data/CC-MAIN-2014-23/segments/1406510280868.21/'
-#segments = [Seg()]
+
+## For testing or spot fixes
+class Seg(object):
+  def __init__(self, name):
+    self.name = 'common-crawl/crawl-data/CC-MAIN-2014-35/segments/{}/'.format(name)
+segments = [Seg('1408500800168.29'), Seg('1408500800767.23'), Seg('1408500801235.4'), Seg('1408500804220.17'), Seg('1408500808153.1')]
+
 
 # Traverse each segment and all the files they contain
 for i, segment in enumerate(segments):
