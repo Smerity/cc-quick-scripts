@@ -63,8 +63,8 @@ for ftype, fsize in size.items():
 
 ###
 # Find missing WAT / WET files
-warc = set([x.strip() for x in open(prefix + 'warc.path').readlines()])
-wat = [x.strip() for x in open(prefix + 'wat.path').readlines()]
+warc = set([x.strip() for x in open(prefix + 'warc.paths').readlines()])
+wat = [x.strip() for x in open(prefix + 'wat.paths').readlines()]
 wat = set([x.replace('.warc.wat.', '.warc.').replace('/wat/', '/warc/') for x in wat])
 # Work out the missing files and segments
 missing = sorted(warc - wat)
