@@ -10,7 +10,7 @@ conn = boto.connect_s3(anon=True)
 pds = conn.get_bucket('aws-publicdatasets')
 
 # Get all segments
-target = 'CC-MAIN-2014-35'
+target = 'CC-MAIN-2014-41'
 segments = list(pds.list('common-crawl/crawl-data/{}/segments/'.format(target), delimiter='/'))
 # Record the total size and all file paths for the segments
 files = dict(warc=[], wet=[], wat=[], segment=[x.name for x in segments])
@@ -32,11 +32,11 @@ if not os.path.exists(prefix):
 ###
 f = open(prefix + 'crawl.size', 'w')
 for ftype, val in size.items():
-  f.write('{}\t{}\n'.format(ftype, sum(val)))
+  f.write('{}\t{}\t{}\n'.format(ftype, sum(val), len(val)))
 f.close()
 ###
 for ftype in files:
-  f = open(prefix + '{}.path'.format(ftype), 'w')
+  f = open(prefix + '{}.paths'.format(ftype), 'w')
   for fn in files[ftype]:
     f.write(fn + '\n')
   f.close()
@@ -45,8 +45,9 @@ for ftype in files:
 for ftype, fsize in size.items():
   sys.stderr.write('{} files contain {} bytes over {} files\n'.format(ftype.upper(), sum(fsize), len(files[ftype])))
 ###
-# Note: you might want to run `gzip *.zip` before upload
-# s3cmd put --acl-public *.path.gz s3://aws-publicdatasets/common-crawl/crawl-data/CC-MAIN-YYYY-WW/
+# To upload to the correct spot on S3
+# gzip *.paths
+# s3cmd put --acl-public *.paths.gz s3://aws-publicdatasets/common-crawl/crawl-data/CC-MAIN-YYYY-WW/
 
 ###
 # Plot
